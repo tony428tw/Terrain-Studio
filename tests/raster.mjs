@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {tileName,pixelPosition,interpolateRaster,fetchCop30} from '../dist/dem-raster.js';
+assert.equal(tileName(24.1,120.7),'Copernicus_DSM_COG_10_N24_00_E120_00_DEM');assert.equal(tileName(-.1,-.1),'Copernicus_DSM_COG_10_S01_00_W001_00_DEM');
+const image={getOrigin:()=>[10,30],getResolution:()=>[1,-1],getGeoKeys:()=>({GTRasterTypeGeoKey:1}),fileDirectory:{}};assert.deepEqual(pixelPosition(image,10.5,29.5),[0,0]);
+assert.equal(interpolateRaster([0,2,4,6],2,2,.5,.5,-9999),3);assert.throws(()=>interpolateRaster([0,-9999,4,6],2,2,.5,.5,-9999));assert.equal(interpolateRaster([0,-9999,4,6],2,2,0,0,-9999),0);
+let opened=0,closed=0;
+const b={south:24.999,north:25.001,west:120.999,east:121.001};
+const r=await fetchCop30(b,4,{resolveURL:async n=>n,fromUrl:async()=>{opened++;return {getImage:async()=>({...image,getOrigin:()=>[120,26],getResolution:()=>[.001,-.001],getGeoKeys:()=>({GTRasterTypeGeoKey:2}),getWidth:()=>2000,getHeight:()=>2000,getGDALNoData:()=>-9999,readRasters:async({window:[l,t,r,b]})=>Array.from({length:(r-l)*(b-t)},(_,i)=>l+i%(r-l)+2*(t+Math.floor(i/(r-l))))}),close:async()=>closed++}}});assert.equal(opened,4);assert.equal(closed,4);assert.equal(r.g.length,25);assert.ok(r.g[0]>r.g[20]);
+const c=new AbortController();c.abort();await assert.rejects(fetchCop30(b,4,{signal:c.signal,fromUrl:()=>{throw Error('should not run')}}));
+console.log('PASS tile naming, pixel centers, NoData, 4-tile stitching, south/north orientation, cancellation');

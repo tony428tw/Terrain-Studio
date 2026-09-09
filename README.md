@@ -1,6 +1,6 @@
 # Terrain-Studio
 
-![Terrain-Studio cover](dist/terrain-studio-cover-artistic.png)
+![Terrain-Studio cover](dist/terrain-studio-cover.svg)
 
 **Terrain-Studio** 是一套瀏覽器內運作的景觀等高線與地形參數設計工具。它讓設計者在「等高線、三維地形、剖面、整地與數位製造」之間快速往返，適合景觀及都市設計的設計推演、教學與模型製作前期。
 

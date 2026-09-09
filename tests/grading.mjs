@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {grid,sample} from '../dist/engine.js';import {applyOperation,evaluateGrading,validateShape,gradingRoute} from '../dist/grading.js';
+const w=80,h=80,flat=grid(()=>10,w,h),near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} != ${b}`),at=(g,x,y)=>sample(g,x,y,w,h);
+const op={kind:'platform',points:[[10,10],[20,10],[20,20],[10,20]],z:15,endZ:10,width:4,cutRatio:1,fillRatio:2,cutLimit:40,fillLimit:40,cut:true,fill:true,enabled:true,pathMode:'ends',grade:5,crossfall:0};
+let g=applyOperation(flat,op,w,h);near(at(g,15,15),15);near(at(g,22,15),14);near(at(g,30,15),10);near(at(g,70,70),10);
+g=applyOperation(flat,{...op,z:5},w,h);near(at(g,15,15),5);near(at(g,22,15),7);near(at(g,26,15),10);
+g=applyOperation(flat,{...op,fill:false},w,h);assert.deepEqual(g,flat);
+g=applyOperation(flat,{...op,kind:'pit',z:12},w,h);assert.deepEqual(g,flat);
+g=applyOperation(flat,{...op,kind:'region'},w,h);assert.deepEqual(g,flat);
+let path={...op,kind:'path',points:[[10,40],[30,40]],z:0,endZ:10,crossfall:5};g=applyOperation(flat,path,w,h);near(at(g,20,40),5);near(at(g,20,41),5.05);
+g=applyOperation(flat,{...path,pathMode:'grade',grade:10,crossfall:0,z:7},w,h);near(at(g,20,40),8);
+g=applyOperation(flat,{...path,pathMode:'follow',crossfall:0,z:1},w,h);near(at(g,20,40),11);
+const a=evaluateGrading(flat,[op],w,h);assert.deepEqual(a,evaluateGrading(flat,[op],w,h));assert.deepEqual(evaluateGrading(flat,[{...op,enabled:false}],w,h).g,flat);near(a.stats[0].area,100);assert.ok(a.stats[0].fill>500);
+let stack=evaluateGrading(flat,[op,{...op,z:12}],w,h);near(at(stack.g,15,15),12);assert.ok(stack.stats[1].cut>0);
+assert.throws(()=>validateShape([[0,0],[20,20],[0,20],[20,0]],true,w,h));assert.throws(()=>validateShape([[0,0],[0,0],[10,10]],true,w,h));assert.throws(()=>validateShape([[0,0],[90,0]],false,w,h));
+let route=gradingRoute({...path,points:[[10,10],[30,10],[30,30]],smooth:true});assert.deepEqual(route[0],[10,10]);assert.deepEqual(route.at(-1),[30,30]);assert.ok(route.length>3);assert.ok(route.every(p=>p.every(v=>v>=10&&v<=30)));
+console.log('PASS dynamic grading: fill/cut daylight slopes, disabled modes, cut-only pits, material-only regions, path end/grade/follow/crossfall, deterministic source replay, sequential stacking, footprint stats, invalid boundaries, smooth endpoints.');
