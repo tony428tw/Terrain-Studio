@@ -9,8 +9,6 @@
 
 [開啟線上工具](https://landscape-contour-studio.jerry428tw.chatgpt.site)
 
-![Terrain Studio terrain-and-fabrication study](dist/terrain-studio-hero.png)
-
 ## 核心流程
 
 ```text
