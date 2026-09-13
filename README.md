@@ -1,10 +1,10 @@
-# Terrain-Studio
+# ContourScape｜等高地景
 
-![Terrain-Studio cover](assets/terrain-studio-cover.webp)
+![ContourScape cover](assets/contourscape-cover.webp)
 
-**Terrain-Studio** 是一套瀏覽器內運作的景觀等高線與地形參數設計工具。它讓設計者在「等高線、三維地形、剖面、整地與數位製造」之間快速往返，適合景觀及都市設計的設計推演、教學與模型製作前期。
+**ContourScape（等高地景）** 是一套瀏覽器內運作的景觀等高線與地形參數設計工具。它讓設計者在「等高線、三維地形、剖面、整地與數位製造」之間快速往返，適合景觀及都市設計的設計推演、教學與模型製作前期。
 
-> 景觀及都市設計 · 參數設計工具
+> 等高地景 · 景觀等高線與地形參數設計工具
 > Created by Jerry Hsu
 
 [開啟線上工具](https://landscape-contour-studio.jerry428tw.chatgpt.site)
@@ -23,7 +23,7 @@
 
 ## 功能
 
-![Terrain-Studio feature overview](assets/terrain-studio-feature-overview.webp)
+![ContourScape feature overview](assets/contourscape-feature-overview.webp)
 
 ### 等高線 × 地形
 
@@ -98,4 +98,4 @@ node tests/raster.mjs
 
 ---
 
-Terrain-Studio is a browser-based landscape terrain, contour, grading, and fabrication study tool. It is intended for conceptual design and teaching; verify survey data, engineering design, and fabrication settings before construction or production.
+ContourScape is a browser-based landscape terrain, contour, grading, and fabrication study tool. It is intended for conceptual design and teaching; verify survey data, engineering design, and fabrication settings before construction or production.
